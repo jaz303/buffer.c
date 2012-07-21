@@ -52,8 +52,7 @@ void buffer_destroy(buffer_t *buffer) {
 }
 
 void buffer_reset(buffer_t *buffer) {
-    buffer->written = 0;
-    buffer->read = 0;
+    BUFFER_RESET(buffer);
 }
 
 int buffer_append(buffer_t *buffer, char byte) {
@@ -87,7 +86,7 @@ int buffer_write(buffer_t *buffer, const char *data, size_t len) {
 
 char buffer_get(buffer_t *buffer) {
     if (buffer->read >= buffer->written) return 0;
-    return buffer->data[buffer->read++];
+    return BUFFER_GET(buffer);
 }
 
 int buffer_read(buffer_t *buffer, size_t maxlen, void *dest) {
@@ -98,38 +97,12 @@ int buffer_read(buffer_t *buffer, size_t maxlen, void *dest) {
     return maxlen;
 }
 
-size_t buffer_capacity(buffer_t *buffer) {
-    return buffer->capacity;
-}
-
-size_t buffer_size(buffer_t *buffer) {
-    return buffer->written;
-}
-
-size_t buffer_remain(buffer_t *buffer) {
-    return buffer->capacity - buffer->written;
-}
-
-int buffer_is_empty(buffer_t *buffer) {
-    return buffer->written == 0;
-}
-
-int buffer_is_full(buffer_t *buffer) {
-    return buffer->written == buffer->capacity;
-}
-
-size_t buffer_tell(buffer_t *buffer) {
-    return buffer->read;
-}
-
-int buffer_eof(buffer_t *buffer) {
-    return buffer->read == buffer->written;
-}
-
-void buffer_rewind(buffer_t *buffer) {
-    buffer->read = 0;
-}
-
-void buffer_seek(buffer_t *buffer, size_t offset) {
-    buffer->read = offset;
-}
+size_t buffer_capacity(buffer_t *buffer) { return BUFFER_CAPACITY(buffer); }
+size_t buffer_size(buffer_t *buffer) { return BUFFER_SIZE(buffer); }
+size_t buffer_remain(buffer_t *buffer) { return BUFFER_REMAIN(buffer); }
+int buffer_is_empty(buffer_t *buffer) { return BUFFER_IS_EMPTY(buffer); }
+int buffer_is_full(buffer_t *buffer) { return BUFFER_IS_FULL(buffer); }
+size_t buffer_tell(buffer_t *buffer) { return BUFFER_TELL(buffer); }
+int buffer_eof(buffer_t *buffer) { return BUFFER_EOF(buffer); }
+void buffer_rewind(buffer_t *buffer) { BUFFER_REWIND(buffer); }
+void buffer_seek(buffer_t *buffer, size_t offset) { BUFFER_SEEK(buffer, offset); }

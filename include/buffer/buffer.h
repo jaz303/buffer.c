@@ -17,6 +17,19 @@ typedef struct {
     size_t          read;
 } buffer_t;
 
+#define BUFFER_RESET(b)                             ((b)->written = 0, (b)->read = 0)
+#define BUFFER_APPEND(b, byte)                      ((b)->data[(b)->written++] = (byte))
+#define BUFFER_GET(b)                               ((b)->data[(b)->read++])
+#define BUFFER_CAPACITY(b)                          ((b)->capacity)
+#define BUFFER_SIZE(b)                              ((b)->written)
+#define BUFFER_REMAIN(b)                            ((b)->capacity - (b)->written)
+#define BUFFER_IS_EMPTY(b)                          ((b)->written == 0)
+#define BUFFER_IS_FULL(b)                           ((b)->written == (b)->capacity)
+#define BUFFER_TELL(b)                              ((b)->read)
+#define BUFFER_EOF(b)                               ((b)->read == (b)->written)
+#define BUFFER_REWIND(b)                            ((b)->read = 0)
+#define BUFFER_SEEK(b, offset)                      ((b)->read = (offset))
+
 /* initialise an existing buffer with an existing data array of given length
  */
 void        buffer_init_static(buffer_t *buffer, char *data, size_t size);
